@@ -1,0 +1,284 @@
+/* Score Viewer Styles */
+
+.score-viewer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.score-placeholder,
+.score-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.score-error {
+  color: #fca5a5;
+}
+
+/* Toolbar */
+.score-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 20px;
+}
+
+.view-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.view-btn {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.view-btn.active {
+  background: rgba(102, 126, 234, 0.3);
+  border-color: rgba(102, 126, 234, 0.6);
+  color: #fbbf24;
+}
+
+.score-info {
+  display: flex;
+  gap: 20px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.info-item {
+  display: flex;
+  gap: 6px;
+}
+
+.info-item strong {
+  opacity: 0.6;
+}
+
+/* Content */
+.score-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+/* Tab View */
+.tab-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tab-container {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.tab-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  line-height: 1.6;
+}
+
+.tab-line:last-child {
+  margin-bottom: 0;
+}
+
+.tab-string-label {
+  width: 20px;
+  text-align: center;
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.tab-string-content {
+  flex: 1;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.tab-char {
+  display: inline-block;
+  width: 8px;
+  text-align: center;
+}
+
+.tab-info {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 12px;
+  opacity: 0.7;
+  text-align: center;
+}
+
+.tab-info p {
+  margin: 4px 0;
+}
+
+/* Staff View */
+.staff-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.staff-container {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 20px;
+  min-height: 200px;
+}
+
+.staff {
+  position: relative;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.staff-line {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.staff-line:nth-child(1) {
+  top: 0;
+}
+
+.staff-line:nth-child(2) {
+  top: 25%;
+}
+
+.staff-line:nth-child(3) {
+  top: 50%;
+}
+
+.staff-line:nth-child(4) {
+  top: 75%;
+}
+
+.staff-line:nth-child(5) {
+  bottom: 0;
+}
+
+.staff-info {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 12px;
+  opacity: 0.7;
+  text-align: center;
+}
+
+.staff-info p {
+  margin: 4px 0;
+}
+
+/* Chord Diagram View */
+.chord-diagram-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chord-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+}
+
+.chord-box {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+}
+
+.chord-box h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.chord-diagram {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chord-diagram svg {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Scrollbar */
+.score-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.score-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.score-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.score-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .score-toolbar {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .view-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .score-info {
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .chord-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+}

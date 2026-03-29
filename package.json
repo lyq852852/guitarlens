@@ -1,0 +1,65 @@
+{
+  "name": "guitarlens",
+  "version": "0.5.0",
+  "description": "AI-powered guitar tab transcription software",
+  "main": "electron/main.js",
+  "homepage": "./",
+  "author": "Mac",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guitarlens/guitarlens.git"
+  },
+  "scripts": {
+    "start": "concurrently \"npm run react-start\" \"wait-on http://localhost:3000 && npm run electron-start\"",
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "electron-start": "electron .",
+    "electron-build": "npm run react-build && electron-builder",
+    "build": "npm run react-build",
+    "dist": "npm run electron-build",
+    "dist-mac": "npm run electron-build -- --mac",
+    "dist-win": "npm run electron-build -- --win",
+    "dist-all": "npm run electron-build -- --mac --win",
+    "test": "react-scripts test",
+    "test:e2e": "playwright test",
+    "test:coverage": "npm test -- --coverage",
+    "lint": "eslint src --ext .ts,.tsx",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "electron": "^27.0.0",
+    "electron-builder": "^24.0.0",
+    "@coderline/alphatab": "^1.8.0",
+    "wavesurfer.js": "^7.0.0",
+    "jspdf": "^2.5.0",
+    "concurrently": "^8.0.0",
+    "wait-on": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^4.9.0",
+    "@playwright/test": "^1.40.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "tailwindcss": "^3.3.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
