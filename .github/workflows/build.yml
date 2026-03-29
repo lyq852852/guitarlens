@@ -25,11 +25,13 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Build
+      - name: Build React app
         run: npm run build
 
       - name: Package macOS
-        run: npm run dist-mac
+        run: npx electron-builder --mac --x64 --arm64
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -38,6 +40,7 @@ jobs:
           path: |
             dist/*.dmg
             dist/*.zip
+          if-no-files-found: warn
 
   build-windows:
     runs-on: windows-latest
@@ -57,11 +60,13 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Build
+      - name: Build React app
         run: npm run build
 
       - name: Package Windows
-        run: npm run dist-win
+        run: npx electron-builder --win --x64
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -70,3 +75,4 @@ jobs:
           path: |
             dist/*.exe
             dist/*.zip
+          if-no-files-found: warn
