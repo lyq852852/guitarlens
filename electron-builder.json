@@ -1,7 +1,7 @@
 {
   "appId": "com.guitarlens.app",
   "productName": "GuitarLens",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "AI Guitar Transcription Software - Automatic tab generation from audio",
   "author": "GuitarLens Team",
   "directories": {
@@ -9,7 +9,7 @@
     "output": "dist"
   },
   "files": [
-    "dist/**/*",
+    "build/**/*",
     "electron/**/*",
     "python/**/*",
     "node_modules/**/*",
@@ -29,7 +29,6 @@
         "arch": ["x64", "arm64"]
       }
     ],
-    "icon": "build/icon.icns",
     "category": "public.app-category.music",
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
@@ -37,7 +36,6 @@
     "entitlementsInherit": "build/entitlements.mac.plist"
   },
   "dmg": {
-    "icon": "build/icon.icns",
     "iconSize": 100,
     "contents": [
       {
@@ -61,16 +59,13 @@
     "target": [
       {
         "target": "nsis",
-        "arch": ["x64", "ia32"]
+        "arch": ["x64"]
       },
       {
         "target": "portable",
-        "arch": ["x64", "ia32"]
+        "arch": ["x64"]
       }
-    ],
-    "icon": "build/icon.ico",
-    "certificateFile": null,
-    "certificatePassword": null
+    ]
   },
   "nsis": {
     "oneClick": false,
@@ -84,7 +79,7 @@
   },
   "publish": {
     "provider": "github",
-    "owner": "guitarlens",
+    "owner": "lyq852852",
     "repo": "guitarlens"
   }
 }
