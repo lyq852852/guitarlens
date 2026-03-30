@@ -5,49 +5,34 @@
   "description": "AI Guitar Transcription Software",
   "author": "GuitarLens Team",
   "directories": {
-    "buildResources": "resources",
     "output": "dist"
   },
   "files": [
     "app/**/*",
     "electron/**/*",
     "python/**/*",
-    "node_modules/**/*",
     "package.json"
   ],
+  "asar": false,
   "mac": {
     "target": [
       {
-        "target": "dmg",
-        "arch": [
-          "x64"
-        ]
-      },
-      {
-        "target": "zip",
-        "arch": [
-          "x64"
-        ]
+        "target": "dir",
+        "arch": ["x64"]
       }
     ],
-    "category": "public.app-category.music",
-    "entitlements": "resources/entitlements.mac.plist",
-    "entitlementsInherit": "resources/entitlements.mac.plist"
+    "category": "public.app-category.music"
   },
   "win": {
     "target": [
       {
-        "target": "nsis",
-        "arch": [
-          "x64"
-        ]
+        "target": "dir",
+        "arch": ["x64"]
       }
     ]
   },
-  "nsis": {
-    "oneClick": false,
-    "allowToChangeInstallationDirectory": true,
-    "createDesktopShortcut": true,
-    "createStartMenuShortcut": true
+  "linux": {
+    "target": ["dir"],
+    "category": "Audio"
   }
 }
