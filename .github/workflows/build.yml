@@ -28,37 +28,25 @@ jobs:
       - name: Prepare app dir
         run: cp -r build app
 
-      - name: List files for packaging
-        run: |
-          echo "=== app/ ==="
-          ls app/
-          echo "=== electron/ ==="
-          ls electron/
-          echo "=== package.json main ==="
-          node -e "console.log(require('./package.json').main)"
+      - name: Install electron-packager
+        run: npm install --save-dev electron-packager
 
-      - name: Package macOS (inline config)
+      - name: Package with electron-packager
         run: |
-          npx electron-builder \
-            --mac \
-            --dir \
-            --config.appId=com.guitarlens.app \
-            --config.productName=GuitarLens \
-            --config.files="app/**/*,electron/**/*,python/**/*,package.json" \
-            --config.asar=false \
-            --config.mac.category=public.app-category.music \
-            --config.directories.output=dist \
+          npx electron-packager . GuitarLens \
+            --platform=darwin \
+            --arch=arm64 \
+            --out=dist \
+            --overwrite \
+            --ignore="node_modules/(react|react-dom|react-scripts|electron-builder|concurrently|wait-on|tailwindcss|autoprefixer|postcss|eslint|prettier|@types|@playwright).*" \
+            --ignore="build" \
+            --ignore="src" \
+            --ignore="public" \
             2>&1
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Show all output
+      - name: Show dist
         if: always()
-        run: |
-          echo "=== dist/ ==="
-          find dist -maxdepth 3 -type f 2>/dev/null || echo "(empty)"
-          echo "=== Any .app bundles ==="
-          find . -maxdepth 3 -name "*.app" -type d 2>/dev/null || echo "(none)"
+        run: ls -laR dist/ 2>/dev/null || echo "dist/ empty"
 
       - name: Upload artifacts
         if: always()
@@ -90,26 +78,17 @@ jobs:
         shell: pwsh
         run: Copy-Item -Recurse build app
 
-      - name: Package Windows (inline config)
-        shell: bash
-        run: |
-          npx electron-builder \
-            --win \
-            --dir \
-            --config.appId=com.guitarlens.app \
-            --config.productName=GuitarLens \
-            --config.files="app/**/*,electron/**/*,python/**/*,package.json" \
-            --config.asar=false \
-            --config.directories.output=dist \
-            2>&1
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install electron-packager
+        run: npm install --save-dev electron-packager
 
-      - name: Show all output
+      - name: Package with electron-packager
+        run: |
+          npx electron-packager . GuitarLens --platform=win32 --arch=x64 --out=dist --overwrite 2>&1
+
+      - name: Show dist
         if: always()
         shell: pwsh
-        run: |
-          if (Test-Path dist) { Get-ChildItem -Recurse dist | Select-Object FullName } else { Write-Host "(empty)" }
+        run: if (Test-Path dist) { Get-ChildItem -Recurse dist | Select FullName } else { Write-Host "dist/ empty" }
 
       - name: Upload artifacts
         if: always()
