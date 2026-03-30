@@ -13,7 +13,7 @@
   "scripts": {
     "start": "concurrently \"npm run react-start\" \"wait-on http://localhost:3000 && npm run electron-start\"",
     "react-start": "react-scripts start",
-    "react-build": "react-scripts build",
+    "react-build": "react-scripts build && mv build app",
     "electron-start": "electron .",
     "electron-build": "npm run react-build && electron-builder",
     "build": "npm run react-build",

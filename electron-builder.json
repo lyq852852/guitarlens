@@ -2,10 +2,9 @@
   "appId": "com.guitarlens.app",
   "productName": "GuitarLens",
   "version": "0.5.0",
-  "description": "AI Guitar Transcription Software - Automatic tab generation from audio",
+  "description": "AI Guitar Transcription Software",
   "author": "GuitarLens Team",
   "directories": {
-    "buildResources": "build",
     "output": "dist"
   },
   "files": [
@@ -15,54 +14,23 @@
     "node_modules/**/*",
     "package.json"
   ],
-  "extraMetadata": {
-    "name": "guitarlens"
-  },
   "mac": {
     "target": [
       {
         "target": "dmg",
-        "arch": ["x64", "arm64"]
+        "arch": ["x64"]
       },
       {
         "target": "zip",
-        "arch": ["x64", "arm64"]
+        "arch": ["x64"]
       }
     ],
-    "category": "public.app-category.music",
-    "hardenedRuntime": true,
-    "gatekeeperAssess": false,
-    "entitlements": "build/entitlements.mac.plist",
-    "entitlementsInherit": "build/entitlements.mac.plist"
-  },
-  "dmg": {
-    "iconSize": 100,
-    "contents": [
-      {
-        "x": 110,
-        "y": 150,
-        "type": "file"
-      },
-      {
-        "x": 240,
-        "y": 150,
-        "type": "link",
-        "path": "/Applications"
-      }
-    ],
-    "window": {
-      "width": 500,
-      "height": 300
-    }
+    "category": "public.app-category.music"
   },
   "win": {
     "target": [
       {
         "target": "nsis",
-        "arch": ["x64"]
-      },
-      {
-        "target": "portable",
         "arch": ["x64"]
       }
     ]
@@ -71,15 +39,6 @@
     "oneClick": false,
     "allowToChangeInstallationDirectory": true,
     "createDesktopShortcut": true,
-    "createStartMenuShortcut": true,
-    "shortcutName": "GuitarLens"
-  },
-  "portable": {
-    "artifactName": "${productName}-${version}-Portable.${ext}"
-  },
-  "publish": {
-    "provider": "github",
-    "owner": "lyq852852",
-    "repo": "guitarlens"
+    "createStartMenuShortcut": true
   }
 }
