@@ -31,16 +31,7 @@ jobs:
           CI: false
 
       - name: Package macOS
-        run: |
-          npx electron-builder --mac --x64 2>&1 | tee build-log.txt || true
-          echo "## Build Log" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          cat build-log.txt >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          # 如果失败则退出
-          if grep -q "Error" build-log.txt; then
-            exit 1
-          fi
+        run: npx electron-builder --mac --x64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -78,12 +69,7 @@ jobs:
           CI: false
 
       - name: Package Windows
-        run: |
-          npx electron-builder --win --x64 2>&1 | tee build-log.txt || true
-          echo "## Build Log" >> $env:GITHUB_STEP_SUMMARY
-          echo "``````" >> $env:GITHUB_STEP_SUMMARY
-          Get-Content build-log.txt >> $env:GITHUB_STEP_SUMMARY
-          echo "``````" >> $env:GITHUB_STEP_SUMMARY
+        run: npx electron-builder --win --x64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
