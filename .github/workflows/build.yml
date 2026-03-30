@@ -28,23 +28,44 @@ jobs:
       - name: Prepare app dir
         run: cp -r build app
 
-      - name: Package macOS
-        run: npx electron-builder --mac dir 2>&1
+      - name: List files for packaging
+        run: |
+          echo "=== app/ ==="
+          ls app/
+          echo "=== electron/ ==="
+          ls electron/
+          echo "=== package.json main ==="
+          node -e "console.log(require('./package.json').main)"
+
+      - name: Package macOS (inline config)
+        run: |
+          npx electron-builder \
+            --mac \
+            --dir \
+            --config.appId=com.guitarlens.app \
+            --config.productName=GuitarLens \
+            --config.files="app/**/*,electron/**/*,python/**/*,package.json" \
+            --config.asar=false \
+            --config.mac.category=public.app-category.music \
+            --config.directories.output=dist \
+            2>&1
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Show dist
+      - name: Show all output
         if: always()
-        run: find . -path ./node_modules -prune -o -path ./.git -prune -o -type f -name "*.app" -print -o -type f -name "*.dmg" -print 2>/dev/null; echo "---"; ls -la dist/ 2>/dev/null || echo "dist/ missing"; ls -la build/unpacked/ 2>/dev/null || echo "build/unpacked/ missing"
+        run: |
+          echo "=== dist/ ==="
+          find dist -maxdepth 3 -type f 2>/dev/null || echo "(empty)"
+          echo "=== Any .app bundles ==="
+          find . -maxdepth 3 -name "*.app" -type d 2>/dev/null || echo "(none)"
 
-      - name: Upload all build outputs
+      - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: GuitarLens-mac-output
-          path: |
-            dist/
-            build/unpacked/
+          name: GuitarLens-mac
+          path: dist/
           if-no-files-found: warn
 
   build-windows:
@@ -69,22 +90,31 @@ jobs:
         shell: pwsh
         run: Copy-Item -Recurse build app
 
-      - name: Package Windows
-        run: npx electron-builder --win dir 2>&1
+      - name: Package Windows (inline config)
+        shell: bash
+        run: |
+          npx electron-builder \
+            --win \
+            --dir \
+            --config.appId=com.guitarlens.app \
+            --config.productName=GuitarLens \
+            --config.files="app/**/*,electron/**/*,python/**/*,package.json" \
+            --config.asar=false \
+            --config.directories.output=dist \
+            2>&1
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Show dist
+      - name: Show all output
         if: always()
         shell: pwsh
-        run: if (Test-Path dist) { Get-ChildItem -Recurse dist -Name } else { Write-Host "dist/ missing" }
+        run: |
+          if (Test-Path dist) { Get-ChildItem -Recurse dist | Select-Object FullName } else { Write-Host "(empty)" }
 
-      - name: Upload all build outputs
+      - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: GuitarLens-win-output
-          path: |
-            dist/
-            build/unpacked/
+          name: GuitarLens-windows
+          path: dist/
           if-no-files-found: warn
