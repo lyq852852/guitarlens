@@ -27,13 +27,26 @@ jobs:
 
       - name: Build React app
         run: npm run build
+        env:
+          CI: false
+
+      - name: Check build output
+        run: |
+          echo "=== build/ 目录内容 ==="
+          ls -la build/ || echo "build/ 不存在"
+          echo "=== electron/ 目录内容 ==="
+          ls -la electron/
+          echo "=== package.json main ==="
+          cat package.json | python3 -c "import json,sys; d=json.load(sys.stdin); print('main:', d.get('main'))"
 
       - name: Package macOS
-        run: npx electron-builder --mac --x64 --arm64
+        run: npx electron-builder --mac --x64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEBUG: electron-builder
 
       - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: GuitarLens-mac
@@ -62,13 +75,22 @@ jobs:
 
       - name: Build React app
         run: npm run build
+        env:
+          CI: false
+
+      - name: Check build output
+        run: |
+          echo "=== build/ 目录 ==="
+          dir build || echo "build/ 不存在"
 
       - name: Package Windows
         run: npx electron-builder --win --x64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEBUG: electron-builder
 
       - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: GuitarLens-windows
