@@ -29,20 +29,25 @@ jobs:
         run: npm run build
         env:
           CI: false
+          BUILD_PATH: app
+
+      - name: Verify app directory
+        run: ls app/index.html
 
       - name: Package macOS
         run: npx electron-builder --mac --x64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: List dist output
+        run: ls -la dist/ 2>/dev/null || echo "dist/ is empty"
+
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: GuitarLens-mac
-          path: |
-            dist/*.dmg
-            dist/*.zip
+          path: dist/
           if-no-files-found: warn
 
   build-windows:
@@ -67,18 +72,23 @@ jobs:
         run: npm run build
         env:
           CI: false
+          BUILD_PATH: app
+
+      - name: Verify app directory
+        run: Test-Path app/index.html
 
       - name: Package Windows
         run: npx electron-builder --win --x64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: List dist output
+        run: dir dist
+
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: GuitarLens-windows
-          path: |
-            dist/*.exe
-            dist/*.zip
+          path: dist/
           if-no-files-found: warn
