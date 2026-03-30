@@ -29,18 +29,26 @@ jobs:
         run: npm run build
         env:
           CI: false
-          BUILD_PATH: app
 
-      - name: Verify app directory
-        run: ls app/index.html
+      - name: Prepare Electron app
+        run: |
+          echo "=== build/ contents ==="
+          ls -la build/
+          echo "=== Renaming build/ to app/ ==="
+          cp -r build app
+          echo "=== app/ contents ==="
+          ls -la app/
 
       - name: Package macOS
-        run: npx electron-builder --mac --x64
+        run: npx electron-builder --mac --x64 --config.electronBuilderConfig.asar=false 2>&1
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: List dist output
-        run: ls -la dist/ 2>/dev/null || echo "dist/ is empty"
+      - name: Debug dist output
+        if: always()
+        run: |
+          echo "=== dist/ contents ==="
+          ls -laR dist/ 2>/dev/null || echo "dist/ not found"
 
       - name: Upload artifacts
         if: always()
@@ -72,18 +80,28 @@ jobs:
         run: npm run build
         env:
           CI: false
-          BUILD_PATH: app
 
-      - name: Verify app directory
-        run: Test-Path app/index.html
+      - name: Prepare Electron app
+        shell: pwsh
+        run: |
+          Write-Host "=== build/ contents ==="
+          dir build
+          Write-Host "=== Copying build/ to app/ ==="
+          Copy-Item -Recurse build app
+          Write-Host "=== app/ contents ==="
+          dir app
 
       - name: Package Windows
-        run: npx electron-builder --win --x64
+        run: npx electron-builder --win --x64 2>&1
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: List dist output
-        run: dir dist
+      - name: Debug dist output
+        if: always()
+        shell: pwsh
+        run: |
+          Write-Host "=== dist/ contents ==="
+          if (Test-Path dist) { dir -Recurse dist } else { Write-Host "dist/ not found" }
 
       - name: Upload artifacts
         if: always()
