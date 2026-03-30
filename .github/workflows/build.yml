@@ -17,11 +17,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
@@ -30,25 +25,21 @@ jobs:
         env:
           CI: false
 
-      - name: Prepare Electron app
-        run: |
-          echo "=== build/ contents ==="
-          ls -la build/
-          echo "=== Renaming build/ to app/ ==="
-          cp -r build app
-          echo "=== app/ contents ==="
-          ls -la app/
+      - name: Prepare app dir
+        run: cp -r build app
 
-      - name: Package macOS
-        run: npx electron-builder --mac --x64 --config.electronBuilderConfig.asar=false 2>&1
+      - name: Show electron-builder version
+        run: npx electron-builder --version
+
+      - name: Package macOS (with full log)
+        run: |
+          npx electron-builder --mac dir --x64 2>&1
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug dist output
+      - name: Show dist
         if: always()
-        run: |
-          echo "=== dist/ contents ==="
-          ls -laR dist/ 2>/dev/null || echo "dist/ not found"
+        run: find dist -type f 2>/dev/null || echo "dist/ empty or missing"
 
       - name: Upload artifacts
         if: always()
@@ -68,11 +59,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
@@ -81,27 +67,22 @@ jobs:
         env:
           CI: false
 
-      - name: Prepare Electron app
+      - name: Prepare app dir
         shell: pwsh
-        run: |
-          Write-Host "=== build/ contents ==="
-          dir build
-          Write-Host "=== Copying build/ to app/ ==="
-          Copy-Item -Recurse build app
-          Write-Host "=== app/ contents ==="
-          dir app
+        run: Copy-Item -Recurse build app
 
-      - name: Package Windows
-        run: npx electron-builder --win --x64 2>&1
+      - name: Show electron-builder version
+        run: npx electron-builder --version
+
+      - name: Package Windows (with full log)
+        run: npx electron-builder --win dir --x64 2>&1
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug dist output
+      - name: Show dist
         if: always()
         shell: pwsh
-        run: |
-          Write-Host "=== dist/ contents ==="
-          if (Test-Path dist) { dir -Recurse dist } else { Write-Host "dist/ not found" }
+        run: if (Test-Path dist) { Get-ChildItem -Recurse dist } else { Write-Host "dist/ empty or missing" }
 
       - name: Upload artifacts
         if: always()
