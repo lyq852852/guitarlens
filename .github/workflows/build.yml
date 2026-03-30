@@ -28,25 +28,23 @@ jobs:
       - name: Prepare app dir
         run: cp -r build app
 
-      - name: Show electron-builder version
-        run: npx electron-builder --version
-
-      - name: Package macOS (with full log)
-        run: |
-          npx electron-builder --mac dir --x64 2>&1
+      - name: Package macOS
+        run: npx electron-builder --mac dir 2>&1
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Show dist
         if: always()
-        run: find dist -type f 2>/dev/null || echo "dist/ empty or missing"
+        run: find . -path ./node_modules -prune -o -path ./.git -prune -o -type f -name "*.app" -print -o -type f -name "*.dmg" -print 2>/dev/null; echo "---"; ls -la dist/ 2>/dev/null || echo "dist/ missing"; ls -la build/unpacked/ 2>/dev/null || echo "build/unpacked/ missing"
 
-      - name: Upload artifacts
+      - name: Upload all build outputs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: GuitarLens-mac
-          path: dist/
+          name: GuitarLens-mac-output
+          path: |
+            dist/
+            build/unpacked/
           if-no-files-found: warn
 
   build-windows:
@@ -71,23 +69,22 @@ jobs:
         shell: pwsh
         run: Copy-Item -Recurse build app
 
-      - name: Show electron-builder version
-        run: npx electron-builder --version
-
-      - name: Package Windows (with full log)
-        run: npx electron-builder --win dir --x64 2>&1
+      - name: Package Windows
+        run: npx electron-builder --win dir 2>&1
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Show dist
         if: always()
         shell: pwsh
-        run: if (Test-Path dist) { Get-ChildItem -Recurse dist } else { Write-Host "dist/ empty or missing" }
+        run: if (Test-Path dist) { Get-ChildItem -Recurse dist -Name } else { Write-Host "dist/ missing" }
 
-      - name: Upload artifacts
+      - name: Upload all build outputs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: GuitarLens-windows
-          path: dist/
+          name: GuitarLens-win-output
+          path: |
+            dist/
+            build/unpacked/
           if-no-files-found: warn
